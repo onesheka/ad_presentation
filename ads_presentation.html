@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<!-- saved from url=(0067)file:///Users/vanshika/Desktop/navi-sponsored-variants/index.html#g -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Navi — Sponsored Products: variant exploration</title>
+<style>
+  :root {
+    --bg: #f7f7f5;
+    --surface: #ffffff;
+    --ink: #0e1116;
+    --ink-muted: #5b6370;
+    --line: #e6e6e1;
+    --accent: #1f6f54;
+    --pro-bg: #ecf6f0;
+    --pro-ink: #1f6f54;
+    --con-bg: #fbeeec;
+    --con-ink: #b1361e;
+    --recommend-bg: #fff7e6;
+    --recommend-ink: #8a5a00;
+    --baseline-bg: #eef1f8;
+    --baseline-ink: #2c3a64;
+    --shadow: 0 1px 2px rgba(15, 17, 22, 0.04), 0 8px 24px rgba(15, 17, 22, 0.06);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 64px 32px 96px;
+  }
+
+  header.page {
+    margin-bottom: 32px;
+  }
+  header.page .eyebrow {
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: var(--ink-muted);
+    margin-bottom: 12px;
+  }
+  header.page h1 {
+    font-size: 40px;
+    line-height: 1.15;
+    margin: 0 0 16px;
+    letter-spacing: -0.02em;
+  }
+  header.page p {
+    font-size: 17px;
+    color: var(--ink-muted);
+    max-width: 720px;
+    margin: 0;
+  }
+
+  .legend {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+  .legend-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  .legend-dot.pro { background: var(--pro-ink); }
+  .legend-dot.con { background: var(--con-ink); }
+
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 32px;
+    padding-bottom: 0;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
+    padding-top: 12px;
+  }
+  .tab {
+    appearance: none;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 12px 16px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-muted);
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tab:hover {
+    color: var(--ink);
+    background: rgba(15, 17, 22, 0.03);
+  }
+  .tab[aria-selected="true"] {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+    font-weight: 600;
+  }
+  .tab .star {
+    color: #d8b66b;
+    font-size: 13px;
+  }
+  .tab .pill {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--baseline-bg);
+    color: var(--baseline-ink);
+  }
+
+  .panel { display: none; }
+  .panel[data-active="true"] { display: block; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .card.recommended {
+    border: 2px solid #d8b66b;
+    box-shadow: 0 1px 2px rgba(15, 17, 22, 0.04), 0 12px 36px rgba(218, 165, 32, 0.18);
+  }
+
+  .card-inner {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 0;
+  }
+  @media (max-width: 880px) {
+    .card-inner { grid-template-columns: 1fr; }
+  }
+
+  .phone {
+    background: linear-gradient(180deg, #fafaf8 0%, #f1f1ee 100%);
+    border-right: 1px solid var(--line);
+    padding: 36px 24px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  @media (max-width: 880px) {
+    .phone { border-right: none; border-bottom: 1px solid var(--line); }
+  }
+  .phone img {
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    border-radius: 18px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 8px 28px rgba(0,0,0,0.10);
+    display: block;
+  }
+
+  .content {
+    padding: 36px 40px;
+  }
+
+  .variant-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+  .variant-id {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+  }
+  .badge {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .badge.recommend {
+    background: var(--recommend-bg);
+    color: var(--recommend-ink);
+  }
+  .badge.baseline {
+    background: var(--baseline-bg);
+    color: var(--baseline-ink);
+  }
+
+  .variant-name {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 6px 0 8px;
+    letter-spacing: -0.01em;
+  }
+  .variant-stat {
+    font-size: 14px;
+    color: var(--ink-muted);
+    margin: 0 0 24px;
+  }
+  .recommend-note {
+    background: var(--recommend-bg);
+    color: var(--recommend-ink);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 14px;
+    margin: 0 0 24px;
+    border: 1px solid #f0dba0;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  @media (max-width: 560px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  .pc {
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 14px;
+  }
+  .pc h4 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0 0 8px;
+  }
+  .pc ul { margin: 0; padding-left: 18px; }
+  .pc li + li { margin-top: 4px; }
+
+  .pc.pro { background: var(--pro-bg); }
+  .pc.pro h4 { color: var(--pro-ink); }
+  .pc.con { background: var(--con-bg); }
+  .pc.con h4 { color: var(--con-ink); }
+
+  .audience-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin: 20px 0 10px;
+  }
+  .audience-label:first-of-type { margin-top: 0; }
+
+  .baseline-note {
+    background: var(--baseline-bg);
+    color: var(--baseline-ink);
+    border: 1px solid #d6dcec;
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    margin: 0;
+  }
+
+  footer.page {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    color: var(--ink-muted);
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="page">
+      <div class="eyebrow">Design exploration · Navi Home</div>
+      <h1>Sponsored Products — variant comparison</h1>
+      <p>
+        Seven layouts for the Sponsored Products module on Navi's home screen.
+        Each variant trades off image impact, ad density, and pricing model
+        differently. Pros and cons are split into <strong>advertiser</strong>
+        and <strong>user</strong> impact.
+      </p>
+      <div class="legend">
+        <span><span class="legend-dot pro"></span>Pros</span>
+        <span><span class="legend-dot con"></span>Cons</span>
+        <span>⭐ Recommended based on funnel data</span>
+      </div>
+    </header>
+
+    <div class="tabs" role="tablist" aria-label="Variants">
+      <button class="tab" role="tab" aria-selected="false" aria-controls="panel-baseline" data-tab="baseline">
+        Today <span class="pill">Current</span>
+      </button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="panel-a" data-tab="a">Variant A</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="panel-b" data-tab="b">Variant B</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="panel-c" data-tab="c">Variant C</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="panel-d" data-tab="d">Variant D</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="panel-e" data-tab="e">Variant E</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="panel-f" data-tab="f">Variant F</button>
+      <button class="tab" role="tab" aria-selected="true" aria-controls="panel-g" data-tab="g">
+        Variant G <span class="star">⭐</span>
+      </button>
+    </div>
+
+    <!-- BASELINE -->
+    <section class="panel" id="panel-baseline" role="tabpanel" data-active="false">
+      <article class="card">
+        <div class="card-inner">
+          <div class="phone">
+            <img src="./ads_presentation_files/baseline.png" alt="Current Navi Homescreen with single Lenskart hero ad">
+          </div>
+          <div class="content">
+            <div class="variant-head">
+              <span class="variant-id">Baseline</span>
+              <span class="badge baseline">Current</span>
+            </div>
+            <h2 class="variant-name">Navi Homescreen — today</h2>
+            <p class="variant-stat">1 hero ad in the first viewport · pagination dots only</p>
+            <p class="baseline-note">
+              The current Sponsored Products module shows one full-bleed hero ad.
+              ~1.x ads receive a measurable impression on first paint, and only
+              &lt;20% of users swipe through to deeper inventory. The variants
+              below explore ways to lift first-paint impressions without losing
+              premium-tier brand impact.
+            </p>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- VARIANT A -->
+    <section class="panel" id="panel-a" role="tabpanel" data-active="false">
+      <article class="card">
+        <div class="card-inner">
+          <div class="phone">
+            <img src="./ads_presentation_files/variant-a.png" alt="Variant A — 2.5-up rail with peeking second card">
+          </div>
+          <div class="content">
+            <div class="variant-head">
+              <span class="variant-id">Variant A</span>
+            </div>
+            <h2 class="variant-name">2.5-up rail</h2>
+            <p class="variant-stat">2 ads in first viewport · ~25 swipes to see all 50</p>
+
+            <div class="audience-label">Advertiser impact</div>
+            <div class="grid">
+              <div class="pc pro">
+                <h4>Pros</h4>
+                <ul>
+                  <li>Large images → strong brand impact per ad</li>
+                  <li>2 ads get measurable impression on first paint (vs 1.x today)</li>
+                  <li>Full headline reads — good for copy-led advertisers</li>
+                </ul>
+              </div>
+              <div class="pc con">
+                <h4>Cons</h4>
+                <ul>
+                  <li>Ads 3–50 depend on swipe (&lt;20% do); long tail rarely seen</li>
+                  <li>Only 2 slots per page × 25 pages → most advertisers never get page-1 placement</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="audience-label">User impact</div>
+            <div class="grid">
+              <div class="pc pro">
+                <h4>Pros</h4>
+                <ul>
+                  <li>Image-forward, snackable</li>
+                  <li>Familiar carousel pattern; low learning curve</li>
+                </ul>
+              </div>
+              <div class="pc con">
+                <h4>Cons</h4>
+                <ul>
+                  <li>Variety is limited unless user swipes</li>
+                  <li>Can feel repetitive over time</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- VARIANT B -->
+    <section class="panel" id="panel-b" role="tabpanel" data-active="false">
+      <article class="card">
+        <div class="card-inner">
+          <div class="phone">
+            <img src="./ads_presentation_files/variant-b.png" alt="Variant B — paged 2x2 grid of sponsored products">
+          </div>
+          <div class="content">
+            <div class="variant-head">
+              <span class="variant-id">Variant B</span>
+            </div>
+            <h2 class="variant-name">Paged 2×2 grid</h2>
+            <p class="variant-stat">4 ads in first viewport · 13 pages for 50 ads</p>
+
+            <div class="audience-label">Advertiser impact</div>
+            <div class="grid">
+              <div class="pc pro">
+                <h4>Pros</h4>
+                <ul>
+                  <li>4 simultaneous measurable impressions (~2× current)</li>
+                  <li>All ads treated equally → simpler flat CPM pricing</li>
+                  <li>Grid layout supports more page-1 advertisers</li>
+                </ul>
+              </div>
+              <div class="pc con">
+                <h4>Cons</h4>
+                <ul>
+                  <li>Smaller images → weaker brand impact</li>
+                  <li>Pagination still gates ads 5+; swipe rate bottleneck persists</li>
+                  <li>Title truncates ("Free gold max" vs full headline)</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="audience-label">User impact</div>
+            <div class="grid">
+              <div class="pc pro">
+                <h4>Pros</h4>
+                <ul>
+                  <li>Easy 4-way compare; good for "pick one"</li>
+                  <li>No ambiguous peek — clear boundaries</li>
+                </ul>
+              </div>
+              <div class="pc con">
+                <h4>Cons</h4>
+                <ul>
+                  <li>Doubles vertical space on the home screen</li>
+                  <li>Reads like a catalog, less "sponsored discovery"</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- VARIANT C -->
+    <section class="panel" id="panel-c" role="tabpanel" data-active="false">
+      <article class="card">
+        <div class="card-inner">
+          <div class="phone">
+            <img src="./ads_presentation_files/variant-c.png" alt="Variant C — hero ad with thumbnail rail of brand logos">
+          </div>
+          <div class="content">
+            <div class="variant-head">
+              <span class="variant-id">Variant C</span>
+            </div>
+            <h2 class="variant-name">Hero + thumb rail</h2>
+            <p class="variant-stat">1 hero + 4 brand tiles in viewport · scroll for more</p>
+
+            <div class="audience-label">Advertiser impact</div>
+            <div class="grid">
+              <div class="pc pro">
+                <h4>Pros</h4>
+                <ul>
+                  <li>Hero slot = 100% view-impression rate → premium inventory</li>
+                  <li>4 thumbs get free measurable impressions alongside hero</li>
+                  <li>Strongest hero brand recall of any variant</li>
+                </ul>
+              </div>
+              <div class="pc con">
+                <h4>Cons</h4>
+                <ul>
+                  <li>Two-tier pricing → ad-sales complexity, advertiser disputes</li>
+                  <li>Thumbs have no value-prop copy → CTR likely low</li>
+                  <li>Only 1 advertiser wins hero → scarcity tension</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="audience-label">User impact</div>
+            <div class="grid">
+              <div class="pc pro">
+                <h4>Pros</h4>
+                <ul>
+                  <li>Clear hierarchy: primary + alternates</li>
+                  <li>Fast brand recognition scan</li>
+                </ul>
+              </div>
+              <div class="pc con">
+                <h4>Cons</h4>
+                <ul>
+                  <li>Thumbs give no info about the offer</li>
+                  <li>Feels app-drawer-like, disconnected from the hero ad</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- VARIANT D -->
+    <section class="panel" id="panel-d" role="tabpanel" data-active="false">
+      <article class="card">
+        <div class="card-inner">
+          <div class="phone">
+            <img src="./ads_presentation_files/variant-d.png" alt="Variant D — stacked list of sponsored products with see all 50 link">
+          </div>
+          <div class="content">
+            <div class="variant-head">
+              <span class="variant-id">Variant D</span>
+            </div>
+            <h2 class="variant-name">Stacked list</h2>
+            <p class="variant-stat">3 ads in first viewport · "See all 50" → dedicated page</p>
+
+            <div class="audience-label">Advertiser impact</div>
+            <div class="grid">
+              <div class="pc pro">
+                <h4>Pros</h4>
+                <ul>
+                  <li>Full headline readable → best copy-led conversion</li>
+                  <li>3 ads get full-width measurable impressions</li>
+                  <li>"See all" page = high-intent destination, can host all 50</li>
+                </ul>
+              </div>
+              <div class="pc con">
+                <h4>Cons</h4>
+                <ul>
+                  <li>72×72 image is tiny → hurts image-led advertisers (fashion, lifestyle)</li>
+                  <li>No premium slot → loses hero-tier revenue</li>
+                  <li>Reads like notification list → ad-blindness risk</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="audience-label">User impact</div>
+            <div class="grid">
+              <div class="pc pro">
+                <h4>Pros</h4>
+                <ul>
+                  <li>Fastest scan, full text visible</li>
+                  <li>"See all" gives dedicated space to browse offers</li>
+                </ul>
+              </div>
+              <div class="pc con">
+                <h4>Cons</h4>
+                <ul>
+                  <li>Low visual energy — feels utilitarian</li>
+                  <li>Loses the "discovery" delight of a sponsored carousel</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- VARIANT E -->
+    <section class="panel" id="panel-e" role="tabpanel" data-active="false">
+      <article class="card">
+        <div class="card-inner">
+          <div class="phone">
+            <img src="./ads_presentation_files/variant-e.png" alt="Variant E — hero ad with mini banner rail of value-prop ads">
+          </div>
+          <div class="content">
+            <div class="variant-head">
+              <span class="variant-id">Variant E</span>
+            </div>
+            <h2 class="variant-name">Hero + mini banner rail</h2>
+            <p class="variant-stat">1 hero + 3 mini banners in viewport (≈5 ads) · scroll for more</p>
+
+            <div class="audience-label">Advertiser impact</div>
+            <div class="grid">
+              <div class="pc pro">
+                <h4>Pros</h4>
+                <ul>
+                  <li>4–5 ads get measurable impressions on first paint (vs 1.x today)</li>
+                  <li>Hero preserves premium view-impression slot</li>
+                  <li>Mini banners carry image + brand + value prop → better CTR than C</li>
+                  <li>Second-tier still monetizable (not just logos)</li>
+                </ul>
+              </div>
+              <div class="pc con">
+                <h4>Cons</h4>
+                <ul>
+                  <li>Two-tier pricing still adds ad-sales complexity (shared w/ C)</li>
+                  <li>Mini banner titles truncate ("10% back" vs "10% cashback on Swiggy")</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="audience-label">User impact</div>
+            <div class="grid">
+              <div class="pc pro">
+                <h4>Pros</h4>
+                <ul>
+                  <li>Image-forward throughout, not just the hero</li>
+                  <li>Good variety without losing primary focus</li>
+                  <li>Alternates feel "ad-like" (consistent with hero)</li>
+                </ul>
+              </div>
+              <div class="pc con">
+                <h4>Cons</h4>
+                <ul>
+                  <li>Higher density — can feel busy on smaller screens</li>
+                  <li>Mini value-prop text is small (may need zoom)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- VARIANT F -->
+    <section class="panel" id="panel-f" role="tabpanel" data-active="false">
+      <article class="card">
+        <div class="card-inner">
+          <div class="phone">
+            <img src="./ads_presentation_files/variant-f.png" alt="Variant F — 3.5-up rail showing more cards per viewport">
+          </div>
+          <div class="content">
+            <div class="variant-head">
+              <span class="variant-id">Variant F</span>
+            </div>
+            <h2 class="variant-name">3.5-up rail</h2>
+            <p class="variant-stat">~3.5 ads in first viewport · ~14 swipes to see all 50</p>
+
+            <div class="audience-label">Advertiser impact</div>
+            <div class="grid">
+              <div class="pc pro">
+                <h4>Pros</h4>
+                <ul>
+                  <li>3.5 ads on first paint (~75% more than Variant A)</li>
+                  <li>All ads treated equally → flat CPM, simple pricing</li>
+                  <li>Image-forward — strong brand impact per ad</li>
+                </ul>
+              </div>
+              <div class="pc con">
+                <h4>Cons</h4>
+                <ul>
+                  <li>Smaller cards = smaller images than A → less brand canvas</li>
+                  <li>Title truncates ("Gold max" vs full headline)</li>
+                  <li>Long-tail still depends on swipe (&lt;20% of users)</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="audience-label">User impact</div>
+            <div class="grid">
+              <div class="pc pro">
+                <h4>Pros</h4>
+                <ul>
+                  <li>More variety visible at a glance vs A</li>
+                  <li>Peek hint clearly invites scrolling</li>
+                </ul>
+              </div>
+              <div class="pc con">
+                <h4>Cons</h4>
+                <ul>
+                  <li>Cards feel cramped — text and image both reduced</li>
+                  <li>Less "snackable", more catalog-y at small scale</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- VARIANT G (RECOMMENDED) -->
+    <section class="panel" id="panel-g" role="tabpanel" data-active="true">
+      <article class="card recommended">
+        <div class="card-inner">
+          <div class="phone">
+            <img src="./ads_presentation_files/variant-g.png" alt="Variant G — hero ad with thumbnail rail showing brand colors and offer titles">
+          </div>
+          <div class="content">
+            <div class="variant-head">
+              <span class="variant-id">Variant G</span>
+              <span class="badge recommend">⭐ Recommended</span>
+            </div>
+            <h2 class="variant-name">Hero + thumbs with title</h2>
+            <p class="variant-stat">1 hero + 3.5 brand thumbs in viewport (≈4–5 ads) · scroll for more</p>
+
+            <p class="recommend-note">
+              Best balance — premium hero + brand-recall thumbs with offer text
+              upfront. Highest measurable-impression count with clearest visual
+              hierarchy.
+            </p>
+
+            <div class="audience-label">Advertiser impact</div>
+            <div class="grid">
+              <div class="pc pro">
+                <h4>Pros</h4>
+                <ul>
+                  <li>4–5 ads get measurable impressions on first paint (vs 1.x today)</li>
+                  <li>Hero preserves premium 100% view-impression slot</li>
+                  <li>Brand-color thumbs aid recognition vs neutral chips</li>
+                  <li>Offer text on each thumb drives CTR (vs C's logo-only)</li>
+                  <li>Smallest module footprint — leaves room for other home content</li>
+                </ul>
+              </div>
+              <div class="pc con">
+                <h4>Cons</h4>
+                <ul>
+                  <li>Two-tier pricing → ad-sales complexity (shared with C, E)</li>
+                  <li>Smaller image canvas — limits image-led advertisers</li>
+                  <li>Offer copy must stay short (≤12 chars) to fit single line</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="audience-label">User impact</div>
+            <div class="grid">
+              <div class="pc pro">
+                <h4>Pros</h4>
+                <ul>
+                  <li>Clearest hierarchy of any variant — hero is unambiguously primary</li>
+                  <li>Offer text upfront answers "what's in it for me"</li>
+                  <li>Compact — feels less ad-heavy on the home screen</li>
+                </ul>
+              </div>
+              <div class="pc con">
+                <h4>Cons</h4>
+                <ul>
+                  <li>Smaller targets to tap (~92×88px)</li>
+                  <li>Brand-color cluster could read as a catalog row</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <footer class="page">
+      Source file: <em>Joyful dragon</em> · Page 1 · 7 variants + baseline.
+      Screenshots exported at 2× from Paper.
+    </footer>
+  </div>
+
+<script>
+  (function () {
+    const tabs = document.querySelectorAll('.tab');
+    const panels = document.querySelectorAll('.panel');
+
+    function activate(tabKey, pushHash) {
+      tabs.forEach(function (t) {
+        const isActive = t.dataset.tab === tabKey;
+        t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+      panels.forEach(function (p) {
+        const isActive = p.id === 'panel-' + tabKey;
+        p.dataset.active = isActive ? 'true' : 'false';
+      });
+      if (pushHash) {
+        history.replaceState(null, '', '#' + tabKey);
+      }
+    }
+
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () {
+        activate(t.dataset.tab, true);
+      });
+    });
+
+    const tabList = document.querySelector('.tabs');
+    tabList.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      const order = Array.from(tabs);
+      const currentIndex = order.findIndex(function (t) {
+        return t.getAttribute('aria-selected') === 'true';
+      });
+      let next = currentIndex;
+      if (e.key === 'ArrowRight') next = (currentIndex + 1) % order.length;
+      if (e.key === 'ArrowLeft') next = (currentIndex - 1 + order.length) % order.length;
+      order[next].focus();
+      activate(order[next].dataset.tab, true);
+    });
+
+    const initial = (location.hash || '').replace('#', '');
+    const valid = Array.from(tabs).some(function (t) { return t.dataset.tab === initial; });
+    if (valid) activate(initial, false);
+  })();
+</script>
+
+
+</body></html>
